@@ -1,0 +1,7 @@
+C:\C#Basics\Prototype\TodoPrototype\TodoPrototype\bin\Debug\TodoPrototype.exe.config
+C:\C#Basics\Prototype\TodoPrototype\TodoPrototype\bin\Debug\TodoPrototype.exe
+C:\C#Basics\Prototype\TodoPrototype\TodoPrototype\bin\Debug\TodoPrototype.pdb
+C:\C#Basics\Prototype\TodoPrototype\TodoPrototype\obj\Debug\TodoPrototype.csprojAssemblyReference.cache
+C:\C#Basics\Prototype\TodoPrototype\TodoPrototype\obj\Debug\TodoPrototype.csproj.CoreCompileInputs.cache
+C:\C#Basics\Prototype\TodoPrototype\TodoPrototype\obj\Debug\TodoPrototype.exe
+C:\C#Basics\Prototype\TodoPrototype\TodoPrototype\obj\Debug\TodoPrototype.pdb
