@@ -34,7 +34,7 @@ namespace TodoPrototype
                 {
                     case "VIEW":
                         Console.WriteLine("View chosen, viewing tasks.");
-                        CRUD.View();
+                        CRUD.Read();
                         hasInput = true;
                         break;
                     case "REMOVE":

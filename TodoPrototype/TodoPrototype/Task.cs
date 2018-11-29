@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace TodoPrototype
 {
+    [Serializable]
     class Task
     {
         public int TaskID;
@@ -14,7 +15,7 @@ namespace TodoPrototype
         public bool Parent;
         public bool Child;
 
-        private Task(int TaskID, string TaskLabel, string TaskContent, bool Parent = false, bool Child = false)
+        public Task(int TaskID = 0, string TaskLabel = " ", string TaskContent = " ", bool Parent = false, bool Child = false)
         {
             this.TaskID = TaskID;
             this.TaskLabel = TaskLabel;

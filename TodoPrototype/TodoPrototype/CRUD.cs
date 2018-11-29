@@ -36,11 +36,23 @@ namespace TodoPrototype
             return contents;
         }
 
-        public static void View()
+        public static TodoPrototype.Task Read()
         {
             var content = GetFile();
 
-            Console.WriteLine(content);
+            return content;
+        }
+
+        public static TodoPrototype.Task Create()
+        {
+            Task CurrentTasks = CRUD.Read();
+            int ID;
+            var label = Helper.GetLabel();
+            var content = Helper.GetContent();
+
+            Task task = new Task(ID, label, content);
+
+            return task;
         }
 
     }
