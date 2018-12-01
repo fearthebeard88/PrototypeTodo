@@ -32,6 +32,21 @@ namespace TodoPrototype
             this.Formatter = new BinaryFormatter();
         }
 
+        public void PrintLabels()
+        {
+            if (this.Tasks.Count > 0)
+            {
+                foreach (Task task in Tasks.Values)
+                {
+                    Console.WriteLine(task.TaskLabel);
+                }
+            }
+            else
+            {
+                Console.WriteLine("No tasks to display.");
+            }
+        }
+
         public void Create(string label, string content)
         {
             if (this.Tasks.ContainsKey(label))
@@ -127,6 +142,7 @@ namespace TodoPrototype
 
         public void Print(string label = "")
         {
+
             if (this.Tasks.Count > 0)
             {
                 if (String.IsNullOrWhiteSpace(label))

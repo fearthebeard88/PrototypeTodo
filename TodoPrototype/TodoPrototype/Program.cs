@@ -14,20 +14,23 @@ namespace TodoPrototype
     {
         static void Main(string[] args)
         {
-            // create a todo list with parent and children tasks
             TaskCollection CurrentList = TaskCollection.Instance();
             bool exitFlag = false;
             while (!exitFlag)
             {
-                Console.WriteLine("Please specify an action.  Choices are the following: \n");
-                Console.WriteLine("View All");
-                Console.WriteLine("View Task");
+                Console.WriteLine("Please choose from the options below. Please note you can include a \n" +
+                                  "label after the option to use that option on just the task with that label.\n");
+                Console.WriteLine("View");
                 Console.WriteLine("Add");
                 Console.WriteLine("Delete");
                 Console.WriteLine("Edit");
                 Console.WriteLine("Exit\n");
 
-                var input = Console.ReadLine().Trim().ToUpper();
+                Console.WriteLine("Current Tasks:");
+                CurrentList.Load();
+                CurrentList.PrintLabels();
+
+                var input = Console.ReadLine().Trim();
                 if (String.IsNullOrWhiteSpace(input))
                 {
                     Console.WriteLine("Invalid response, try again.");
@@ -36,64 +39,102 @@ namespace TodoPrototype
 
                 try
                 {
-                    CurrentList.Load();
-                    string label;
-                    string content;
+                    var inputArray = input.Split(' ');
+                    string arguments = "";
+                    if (inputArray.Length > 1 && !(inputArray.Length > 2))
+                    {
+                        input = inputArray[0].ToUpper();
+                        arguments = inputArray[1];
+                    }
+                    else if (inputArray.Length > 2)
+                    {
+                        throw new SystemException("More than one additional argument is not supported at this time.");
+                    }
+                    else
+                    {
+                        input = inputArray[0].ToUpper();
+                    }
+
+                    string label = "";
+                    string content = "";
 
                     switch (input)
                     {
-                        case "VIEW ALL":
-                            Console.Clear();
-                            Console.WriteLine("View chosen, viewing tasks.");
-                            CurrentList.Print();
-                            Console.Beep();
-                            continue;
-                        case "VIEW TASK":
-                            Console.Clear();
-                            Console.WriteLine("Which task do you want to view?");
-                            label = Console.ReadLine();
-                            CurrentList.Print(label);
-                            Console.Beep();
+                        case "VIEW":
+                            BeepAndClear();
+                            Console.WriteLine("View");
+                            if (arguments.Trim().Length > 0)
+                            {
+                                CurrentList.Print(arguments.Trim());
+                            }
+                            else
+                            {
+                                CurrentList.Print();
+                            }
+                            
                             continue;
                         case "DELETE":
-                            Console.Clear();
-                            Console.WriteLine("Delete Chosen, please input the label of the task you wish to delete");
-                            label = Console.ReadLine().Trim();
+                            BeepAndClear();
+                            Console.WriteLine("Delete");
+                            if (arguments.Trim().Length > 0)
+                            {
+                                label = arguments.Trim();
+                            }
+                            else
+                            {
+                                Console.Write("Label of task to be deleted: ");
+                                label = Console.ReadLine().Trim();
+                            }
+
                             CurrentList.Delete(label);
                             CurrentList.Save();
-                            Console.Beep();
                             continue;
                         case "EDIT":
-                            Console.Clear();
-                            Console.WriteLine("Edit chosen, please choose a task to edit.");
-                            Console.Write("Label of task to edit: ");
-                            label = Console.ReadLine();
+                            BeepAndClear();
+                            Console.WriteLine("Edit");
+                            if (arguments.Trim().Length > 0)
+                            {
+                                label = arguments.Trim();
+                            }
+                            else
+                            {
+                                Console.Write("Label of task to edit: ");
+                                label = Console.ReadLine();
+                            }
+
                             Console.Write("New content: ");
                             content = Console.ReadLine();
                             CurrentList.Edit(label, content);
                             CurrentList.Save();
-                            Console.Beep();
+                            BeepAndClear();
                             continue;
-                        /*break*/
                         case "ADD":
-                            Console.Clear();
-                            Console.WriteLine("Add chosen, please input a label and content");
-                            Console.Write("Label: ");
-                            label = Console.ReadLine().Trim();
+                            BeepAndClear();
+                            Console.WriteLine("Add");
+                            if (arguments.Trim().Length > 0)
+                            {
+                                label = arguments.Trim();
+                            }
+                            else
+                            {
+                                Console.Write("Label: ");
+                                label = Console.ReadLine().Trim();
+                            }
+                            
                             Console.Write("Content: ");
                             content = Console.ReadLine().Trim();
                             CurrentList.Create(label, content);
                             CurrentList.Save();
-                            Console.Beep();
+                            BeepAndClear();
                             continue;
                         case "EXIT":
-                            Console.Clear();
-                            Console.WriteLine("Exiting now.");
+                            BeepAndClear();
+                            Console.WriteLine("Exiting now...");
                             exitFlag = true;
-                            Console.Beep();
+                            Environment.Exit(0);
                             return;
                         default:
-                            Console.Clear();
+                            BeepAndClear();
                             Console.WriteLine("Unknown input detected, please choose from the options below.");
                             Console.Beep();
                             continue;
@@ -101,9 +142,17 @@ namespace TodoPrototype
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Error handling request. Error: {0}", e.Message);
+                    Console.WriteLine("There was an error processing your request. Error: {0}", e.Message);
+                    Console.Beep();
+                    continue;
                 }
             }
+        }
+
+        public static void BeepAndClear()
+        {
+            Console.Clear();
+            Console.Beep();
         }
     }
 }
