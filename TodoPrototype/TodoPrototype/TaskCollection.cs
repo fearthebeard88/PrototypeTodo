@@ -51,6 +51,22 @@ namespace TodoPrototype
             }
         }
 
+        public void Edit(string label, string newContent)
+        {
+            if (this.Tasks.ContainsKey(label))
+            {
+                try
+                {
+                    this.Tasks[label].TaskContent = newContent;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error encountered when editing task with label: {0}. Error: {1}", label, e.Message);
+                    throw;
+                }
+            }
+        }
+
         public void Delete(string label)
         {
             if (!this.Tasks.ContainsKey(label))

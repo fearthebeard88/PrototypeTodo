@@ -53,7 +53,13 @@ namespace TodoPrototype
                             continue;
                         case "EDIT":
                             Console.WriteLine("Edit chosen, please choose a task to edit.");
-                            throw new SystemException("Not yet implemented.");
+                            Console.Write("Label of task to edit: ");
+                            label = Console.ReadLine();
+                            Console.Write("New content: ");
+                            content = Console.ReadLine();
+                            CurrentList.Edit(label, content);
+                            CurrentList.Save();
+                            break;
                         /*break*/
                         case "ADD":
                             Console.WriteLine("Add chosen, please input a label and content");
