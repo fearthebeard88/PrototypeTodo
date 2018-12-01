@@ -125,15 +125,23 @@ namespace TodoPrototype
             }
         }
 
-        public void Print()
+        public void Print(string label = "")
         {
             if (this.Tasks.Count > 0)
             {
-                Console.WriteLine("Task Label, Task Content");
-
-                foreach (Task task in Tasks.Values)
+                if (String.IsNullOrWhiteSpace(label))
                 {
-                    Console.WriteLine(task.Label + ", " + task.Content);
+                    foreach (Task task in Tasks.Values)
+                    {
+                        Console.WriteLine(task.Label + ": " + task.Content);
+                    }
+                }
+                else
+                {
+                    if (this.Tasks.ContainsKey(label))
+                    {
+                        Console.WriteLine("{0}: {1}", Tasks[label].TaskLabel, Tasks[label].TaskContent);
+                    }
                 }
             }
             else
