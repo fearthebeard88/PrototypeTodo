@@ -13,8 +13,8 @@ namespace TodoPrototype
         static void Main(string[] args)
         {
             // create a todo list with parent and children tasks
-            bool hasInput = false;
-            while (!hasInput)
+            bool exitFlag = false;
+            while (!exitFlag)
             {
                 Console.WriteLine("Please specify an action.  Choices are the following: \n");
                 Console.WriteLine("View");
@@ -34,26 +34,23 @@ namespace TodoPrototype
                 {
                     case "VIEW":
                         Console.WriteLine("View chosen, viewing tasks.");
-                        CRUD.Read();
-                        hasInput = true;
+                        // code here
                         break;
                     case "REMOVE":
                         Console.WriteLine("Delete chosen, choose tasks for deletion.");
                         // remove method
-                        hasInput = true;
                         break;
                     case "EDIT":
                         Console.WriteLine("Edit chosen, please choose a task to edit.");
                         // edit method
-                        hasInput = true;
                         break;
                     case "ADD":
                         Console.WriteLine("Add chosen, please add a task.");
                         // add method
-                        hasInput = true;
                         break;
                     case "EXIT":
                         Console.WriteLine("Exiting now.");
+                        exitFlag = true;
                         return;
                     default:
                         Console.WriteLine("Unknown input detected, please choose from the options above.");
