@@ -24,7 +24,7 @@ namespace TodoPrototype
                 Console.WriteLine("Add");
                 Console.WriteLine("Delete");
                 Console.WriteLine("Edit");
-                Console.WriteLine("Exit");
+                Console.WriteLine("Exit\n");
 
                 var input = Console.ReadLine().Trim().ToUpper();
                 if (String.IsNullOrWhiteSpace(input))
