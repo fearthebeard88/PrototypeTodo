@@ -1,7 +1,9 @@
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +15,7 @@ namespace TodoPrototype
         static void Main(string[] args)
         {
             // create a todo list with parent and children tasks
+            TaskCollection CurrentList = TaskCollection.Instance();
             bool exitFlag = false;
             while (!exitFlag)
             {
@@ -30,31 +33,49 @@ namespace TodoPrototype
                     continue;
                 }
 
-                switch (input)
+                try
                 {
-                    case "VIEW":
-                        Console.WriteLine("View chosen, viewing tasks.");
-                        // code here
-                        break;
-                    case "REMOVE":
-                        Console.WriteLine("Delete chosen, choose tasks for deletion.");
-                        // remove method
-                        break;
-                    case "EDIT":
-                        Console.WriteLine("Edit chosen, please choose a task to edit.");
-                        // edit method
-                        break;
-                    case "ADD":
-                        Console.WriteLine("Add chosen, please add a task.");
-                        // add method
-                        break;
-                    case "EXIT":
-                        Console.WriteLine("Exiting now.");
-                        exitFlag = true;
-                        return;
-                    default:
-                        Console.WriteLine("Unknown input detected, please choose from the options above.");
-                        break;
+                    CurrentList.Load();
+                    string label;
+                    string content;
+
+                    switch (input)
+                    {
+                        case "VIEW":
+                            Console.WriteLine("View chosen, viewing tasks.");
+                            CurrentList.Print();
+                            continue;
+                        case "DELETE":
+                            Console.WriteLine("Delete Chosen, please input the label of the task you wish to delete");
+                            label = Console.ReadLine().Trim();
+                            CurrentList.Delete(label);
+                            CurrentList.Save();
+                            continue;
+                        case "EDIT":
+                            Console.WriteLine("Edit chosen, please choose a task to edit.");
+                            throw new SystemException("Not yet implemented.");
+                        /*break*/
+                        case "ADD":
+                            Console.WriteLine("Add chosen, please input a label and content");
+                            Console.Write("Label: ");
+                            label = Console.ReadLine().Trim();
+                            Console.Write("Content: ");
+                            content = Console.ReadLine().Trim();
+                            CurrentList.Create(label, content);
+                            CurrentList.Save();
+                            continue;
+                        case "EXIT":
+                            Console.WriteLine("Exiting now.");
+                            exitFlag = true;
+                            return;
+                        default:
+                            Console.WriteLine("Unknown input detected, please choose from the options above.");
+                            continue;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error handling request. Error: {0}", e.Message);
                 }
             }
         }
