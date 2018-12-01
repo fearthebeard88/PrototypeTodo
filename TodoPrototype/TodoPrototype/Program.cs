@@ -66,10 +66,12 @@ namespace TodoPrototype
                             if (arguments.Trim().Length > 0)
                             {
                                 CurrentList.Print(arguments.Trim());
+                                Console.WriteLine();
                             }
                             else
                             {
                                 CurrentList.Print();
+                                Console.WriteLine();
                             }
                             
                             continue;
@@ -102,11 +104,19 @@ namespace TodoPrototype
                                 label = Console.ReadLine();
                             }
 
-                            Console.Write("New content: ");
-                            content = Console.ReadLine();
-                            CurrentList.Edit(label, content);
-                            CurrentList.Save();
-                            BeepAndClear();
+                            var labelsCollection = CurrentList.GetLabels();
+                            if (labelsCollection.Contains(label))
+                            {
+                                Console.Write("New content: ");
+                                content = Console.ReadLine();
+                                CurrentList.Edit(label, content);
+                                CurrentList.Save();
+                            }
+                            else
+                            {
+                                throw new SystemException(String.Format("There is no task with label of {0}.", label));
+                            }
+                            
                             continue;
                         case "ADD":
                             BeepAndClear();

@@ -66,6 +66,12 @@ namespace TodoPrototype
             }
         }
 
+        public Dictionary<string, Task>.KeyCollection GetLabels()
+        {
+            var labels = Tasks.Keys;
+            return labels;
+        }
+
         public void Edit(string label, string newContent)
         {
             if (this.Tasks.ContainsKey(label))
@@ -79,6 +85,10 @@ namespace TodoPrototype
                     Console.WriteLine("Error encountered when editing task with label: {0}. Error: {1}", label, e.Message);
                     throw;
                 }
+            }
+            else
+            {
+                Console.WriteLine("There is no tast with label: {0}", label);
             }
         }
 
