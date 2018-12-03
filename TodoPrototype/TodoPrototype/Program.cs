@@ -44,7 +44,7 @@ namespace TodoPrototype
                     if (inputArray.Length > 1 && !(inputArray.Length > 2))
                     {
                         input = inputArray[0].ToUpper();
-                        arguments = inputArray[1];
+                        arguments = inputArray[1].Trim();
                     }
                     else if (inputArray.Length > 2)
                     {
