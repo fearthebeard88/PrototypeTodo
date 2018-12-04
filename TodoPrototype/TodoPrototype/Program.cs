@@ -39,33 +39,36 @@ namespace TodoPrototype
 
                 try
                 {
+                    string label = "";
+                    string content = "";
                     var inputArray = input.Split(' ');
-                    string arguments = "";
-                    if (inputArray.Length > 1 && !(inputArray.Length > 2))
+                    Dictionary<string, string> inputDictionary = new Dictionary<string, string>();
+                    inputDictionary["input"] = inputArray[0].Trim().ToUpper();
+
+                    // first argument is the action, second would be label, third is content
+                    if (inputArray.Length > 3)
                     {
-                        input = inputArray[0].ToUpper();
-                        arguments = inputArray[1].Trim();
+                        throw new SystemException("Too many arguments.");
                     }
                     else if (inputArray.Length > 2)
                     {
-                        throw new SystemException("More than one additional argument is not supported at this time.");
+                        inputDictionary["label"] = inputArray[1].Trim();
+                        inputDictionary["content"] = inputArray[2].Trim();
                     }
-                    else
+                    else if (inputArray.Length > 1)
                     {
-                        input = inputArray[0].ToUpper();
+                        inputDictionary["label"] = inputArray[1].Trim();
                     }
 
-                    string label = "";
-                    string content = "";
-
+                    input = inputDictionary["input"];
                     switch (input)
                     {
                         case "VIEW":
                             BeepAndClear();
                             Console.WriteLine("View");
-                            if (arguments.Trim().Length > 0)
+                            if (inputDictionary.ContainsKey("label"))
                             {
-                                CurrentList.Print(arguments.Trim());
+                                CurrentList.Print(inputDictionary["label"]);
                                 Console.WriteLine();
                             }
                             else
@@ -78,14 +81,16 @@ namespace TodoPrototype
                         case "DELETE":
                             BeepAndClear();
                             Console.WriteLine("Delete");
-                            if (arguments.Trim().Length > 0)
+                            if (inputDictionary.ContainsKey("label"))
                             {
-                                label = arguments.Trim();
+                                label = inputDictionary["label"];
                             }
                             else
                             {
                                 Console.Write("Label of task to be deleted: ");
+                                CurrentList.PrintLabels();
                                 label = Console.ReadLine().Trim();
+                                BeepAndClear();
                             }
 
                             CurrentList.Delete(label);
@@ -94,13 +99,14 @@ namespace TodoPrototype
                         case "EDIT":
                             BeepAndClear();
                             Console.WriteLine("Edit");
-                            if (arguments.Trim().Length > 0)
+                            if (inputDictionary.ContainsKey("label"))
                             {
-                                label = arguments.Trim();
+                                label = inputDictionary["label"];
                             }
                             else
                             {
                                 Console.Write("Label of task to edit: ");
+                                CurrentList.PrintLabels();
                                 label = Console.ReadLine();
                             }
 
@@ -121,9 +127,9 @@ namespace TodoPrototype
                         case "ADD":
                             BeepAndClear();
                             Console.WriteLine("Add");
-                            if (arguments.Trim().Length > 0)
+                            if (inputDictionary.ContainsKey("label"))
                             {
-                                label = arguments.Trim();
+                                label = inputDictionary["label"];
                             }
                             else
                             {
