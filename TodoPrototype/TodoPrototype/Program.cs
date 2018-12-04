@@ -18,7 +18,7 @@ namespace TodoPrototype
             bool exitFlag = false;
             while (!exitFlag)
             {
-                Console.WriteLine("Please choose from the options below. Please note you can include a \n" +
+                Console.WriteLine("\nPlease choose from the options below. Please note you can include a \n" +
                                   "label after the option to use that option on just the task with that label.\n");
                 Console.WriteLine("View");
                 Console.WriteLine("Add");
