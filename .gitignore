@@ -1,2 +1,8 @@
-TodoPrototype/.vs/TodoPrototype/v15/Server/sqlite3
-TodoPrototype/PrototypeFiles/Todo.txt
+TodoPrototype/.vs
+TodoPrototype/PrototypeFiles
+TodoPrototype/TodoPrototype/bin
+TodoPrototype/TodoPrototype/obj
+TodoPrototype/TodoPrototype/Properties
+TodoPrototype/TodoPrototype/App.config
+TodoPrototype/TodoPrototype/TodoPrototype.csproj
+TodoPrototype/TodoPrototype.sln
