@@ -5,3 +5,10 @@ C:\C#Basics\Prototype\TodoPrototype\TodoPrototype\obj\Debug\TodoPrototype.csproj
 C:\C#Basics\Prototype\TodoPrototype\TodoPrototype\obj\Debug\TodoPrototype.csproj.CoreCompileInputs.cache
 C:\C#Basics\Prototype\TodoPrototype\TodoPrototype\obj\Debug\TodoPrototype.exe
 C:\C#Basics\Prototype\TodoPrototype\TodoPrototype\obj\Debug\TodoPrototype.pdb
+C:\Users\tferr\OneDrive\Desktop\StuffToTransfer\StuffToTransfer\C#Basics\Prototype\TodoPrototype\TodoPrototype\bin\Debug\TodoPrototype.exe.config
+C:\Users\tferr\OneDrive\Desktop\StuffToTransfer\StuffToTransfer\C#Basics\Prototype\TodoPrototype\TodoPrototype\bin\Debug\TodoPrototype.exe
+C:\Users\tferr\OneDrive\Desktop\StuffToTransfer\StuffToTransfer\C#Basics\Prototype\TodoPrototype\TodoPrototype\bin\Debug\TodoPrototype.pdb
+C:\Users\tferr\OneDrive\Desktop\StuffToTransfer\StuffToTransfer\C#Basics\Prototype\TodoPrototype\TodoPrototype\obj\Debug\TodoPrototype.csprojAssemblyReference.cache
+C:\Users\tferr\OneDrive\Desktop\StuffToTransfer\StuffToTransfer\C#Basics\Prototype\TodoPrototype\TodoPrototype\obj\Debug\TodoPrototype.csproj.CoreCompileInputs.cache
+C:\Users\tferr\OneDrive\Desktop\StuffToTransfer\StuffToTransfer\C#Basics\Prototype\TodoPrototype\TodoPrototype\obj\Debug\TodoPrototype.exe
+C:\Users\tferr\OneDrive\Desktop\StuffToTransfer\StuffToTransfer\C#Basics\Prototype\TodoPrototype\TodoPrototype\obj\Debug\TodoPrototype.pdb
