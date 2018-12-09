@@ -48,7 +48,8 @@ namespace TodoPrototype
                     // first argument is the action, second would be label, third is content
                     if (inputArray.Length > 3)
                     {
-                        throw new SystemException("Too many arguments.");
+                        Console.WriteLine("Too many arguments given.");
+                        continue;
                     }
                     else if (inputArray.Length > 2)
                     {
@@ -77,7 +78,7 @@ namespace TodoPrototype
                                 Console.WriteLine();
                             }
                             
-                            continue;
+                            break;
                         case "DELETE":
                             BeepAndClear();
                             Console.WriteLine("Delete");
@@ -95,7 +96,7 @@ namespace TodoPrototype
 
                             CurrentList.Delete(label);
                             CurrentList.Save();
-                            continue;
+                            break;
                         case "EDIT":
                             BeepAndClear();
                             Console.WriteLine("Edit");
@@ -123,7 +124,7 @@ namespace TodoPrototype
                                 throw new SystemException(String.Format("There is no task with label of {0}.", label));
                             }
                             
-                            continue;
+                            break;
                         case "ADD":
                             BeepAndClear();
                             Console.WriteLine("Add");
@@ -142,7 +143,7 @@ namespace TodoPrototype
                             CurrentList.Create(label, content);
                             CurrentList.Save();
                             BeepAndClear();
-                            continue;
+                            break;
                         case "EXIT":
                             BeepAndClear();
                             Console.WriteLine("Exiting now...");
@@ -153,7 +154,7 @@ namespace TodoPrototype
                             BeepAndClear();
                             Console.WriteLine("Unknown input detected, please choose from the options below.");
                             Console.Beep();
-                            continue;
+                             break;
                     }
                 }
                 catch (Exception e)
