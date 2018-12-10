@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -26,6 +27,14 @@ namespace TodoPrototype
             return taskCollection;
         }
 
+        public Dictionary<int, string> Response(int code, string msg)
+        {
+            var Response = new Dictionary<int, string>();
+            Response[code] = msg;
+
+            return Response;
+        }
+
         private TaskCollection()
         {
             this.Tasks = new Dictionary<string, Task>();
@@ -47,22 +56,24 @@ namespace TodoPrototype
             }
         }
 
-        public void Create(string label, string content)
+        public Dictionary<int, string> Create(string label, string content)
         {
             if (this.Tasks.ContainsKey(label))
             {
-                Console.WriteLine("{0} already exists, please choose a new task label.", label);
-                return;
+                var response = Response(300, "This label already contains a task.");
+                return response;
             }
 
             try
             {
                 this.Tasks.Add(label, new TodoPrototype.Task(label, content));
+                var response = Response(200, "Task created.");
+                return response;
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error encountered when adding new task. Error: {0}", e.Message);
-                throw;
+                var response = Response(500, e.Message);
+                return response;
             }
         }
 
@@ -72,46 +83,43 @@ namespace TodoPrototype
             return labels;
         }
 
-        public void Edit(string label, string newContent)
+        public Dictionary<int, string> Edit(string label, string newContent)
         {
             if (this.Tasks.ContainsKey(label))
             {
-                try
-                {
-                    this.Tasks[label].TaskContent = newContent;
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Error encountered when editing task with label: {0}. Error: {1}", label, e.Message);
-                    throw;
-                }
+                this.Tasks[label].TaskContent = newContent;
+                var response = Response(200, "Task Edited.");
+                return response;
             }
             else
             {
-                Console.WriteLine("There is no tast with label: {0}", label);
+                var response = Response(500, "That label does not exist.");
+                return response;
             }
         }
 
-        public void Delete(string label)
+        public Dictionary<int, string> Delete(string label)
         {
             if (!this.Tasks.ContainsKey(label))
             {
-                Console.WriteLine("No matching task with label: {0}", label);
-                return;
+                var response = Response(500, "No task under that label.");
+                return response;
             }
 
             try
             {
                 this.Tasks.Remove(label);
+                var response = Response(200, "Task deleted.");
+                return response;
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error encountered when removing task with label: {0}. Error: {1}", label, e.Message);
-                throw;
+                var response = Response(500, e.Message);
+                return response;
             }
         }
 
-        public void Save()
+        public Dictionary<int, string> Save()
         {
             string Path = TaskCollection.ResourcePath.Replace('/', System.IO.Path.DirectorySeparatorChar);
 
@@ -120,17 +128,20 @@ namespace TodoPrototype
                 FileStream writeStream = new FileStream(Path, FileMode.Create, FileAccess.Write);
                 this.Formatter.Serialize(writeStream, this.Tasks);
                 writeStream.Close();
+                var response = Response(200, "Save confirmed.");
+                return response;
             }
             catch (Exception e)
             {
-                Console.WriteLine("Failed to save tasks. Error: {0}", e.Message);
-                throw;
+                var response = Response(500, e.Message);
+                return response;
             }
         }
 
-        public void Load()
+        public Dictionary<int, string> Load()
         {
             string Path = TaskCollection.ResourcePath.Replace('/', System.IO.Path.DirectorySeparatorChar);
+            var response = Response(200, "");
 
             if (File.Exists(Path))
             {
@@ -141,17 +152,23 @@ namespace TodoPrototype
                     // casting the deserialized object into a dictionary format
                     this.Tasks = (Dictionary<string, Task>) this.Formatter.Deserialize(readStream);
                     readStream.Close();
+                    response[200] = "File load confirmed.";
+                    return response;
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Unable to load the task collection. Error: {0}", e.Message);
-                    throw;
+                    response[500] = "Not able to load file.";
+                    return response;
                 }
             }
+
+            response[500] = "File does not exist to load.";
+            return response;
         }
 
-        public void Print(string label = "")
+        public Dictionary<int, string> Print(string label = "")
         {
+            var response = Response(200, "");
 
             if (this.Tasks.Count > 0)
             {
@@ -161,18 +178,27 @@ namespace TodoPrototype
                     {
                         Console.WriteLine(task.Label + ": " + task.Content);
                     }
+
+                    response[200] = "Tasks returned.";
+                    return response;
                 }
                 else
                 {
                     if (this.Tasks.ContainsKey(label))
                     {
-                        Console.WriteLine("{0}: {1}", Tasks[label].TaskLabel, Tasks[label].TaskContent);
+                        var msg = String.Format("{0}: {1}", Tasks[label].TaskLabel, Tasks[label].TaskContent);
+                        response[200] = msg;
+                        return response;
                     }
+
+                    response[500] = "No task under that label.";
+                    return response;
                 }
             }
             else
             {
-                Console.WriteLine("There are no tasks to view yet.");
+                response[200] = "No tasks to view.";
+                return response;
             }
         }
     }

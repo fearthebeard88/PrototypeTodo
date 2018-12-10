@@ -12,6 +12,8 @@ namespace TodoPrototype
 {
     class Program
     {
+        // PrintLabels is the only method that does not return anything
+
         static void Main(string[] args)
         {
             TaskCollection CurrentList = TaskCollection.Instance();
@@ -27,8 +29,14 @@ namespace TodoPrototype
                 Console.WriteLine("Exit\n");
 
                 Console.WriteLine("Current Tasks:");
-                CurrentList.Load();
-                CurrentList.PrintLabels();
+                var results = CurrentList.Load();
+                if (results.ContainsKey(500))
+                {
+                    Console.WriteLine(results[500]);
+                    return;
+                }
+
+                CurrentList.PrintLabels(); // not returning a dictionary
 
                 var input = Console.ReadLine().Trim();
                 if (String.IsNullOrWhiteSpace(input))
