@@ -47,7 +47,7 @@ namespace TodoPrototype
             {
                 foreach (Task task in Tasks.Values)
                 {
-                    Console.WriteLine(task.TaskLabel);
+                    Console.WriteLine(task.TaskLabel + "\n");
                 }
             }
             else
@@ -157,7 +157,7 @@ namespace TodoPrototype
                 }
                 catch (Exception e)
                 {
-                    response[500] = "Not able to load file.";
+                    response[500] = e.Message;
                     return response;
                 }
             }
@@ -186,8 +186,8 @@ namespace TodoPrototype
                 {
                     if (this.Tasks.ContainsKey(label))
                     {
-                        var msg = String.Format("{0}: {1}", Tasks[label].TaskLabel, Tasks[label].TaskContent);
-                        response[200] = msg;
+                        Console.WriteLine(String.Format("{0}: {1}\n", Tasks[label].TaskLabel, Tasks[label].TaskContent));
+                        response[200] = "Tasks returned.";
                         return response;
                     }
 
@@ -197,7 +197,7 @@ namespace TodoPrototype
             }
             else
             {
-                response[200] = "No tasks to view.";
+                response[500] = "No tasks to view.";
                 return response;
             }
         }
