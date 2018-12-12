@@ -105,7 +105,7 @@ namespace TodoPrototype
                         }
                         else
                         {
-                            Console.Write("Label of task to be deleted: ");
+                            Console.WriteLine("Label of task to be deleted: ");
                             CurrentList.PrintLabels();
                             label = Console.ReadLine().Trim();
                         }
