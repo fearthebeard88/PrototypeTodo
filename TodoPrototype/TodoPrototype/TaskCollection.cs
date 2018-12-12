@@ -47,7 +47,7 @@ namespace TodoPrototype
             {
                 foreach (Task task in Tasks.Values)
                 {
-                    Console.WriteLine(task.TaskLabel + "\n");
+                    Console.WriteLine(task.TaskLabel);
                 }
             }
             else
@@ -60,19 +60,19 @@ namespace TodoPrototype
         {
             if (this.Tasks.ContainsKey(label))
             {
-                var response = Response(300, "This label already contains a task.");
+                var response = Response(500, $"{label} already contains a task.");
                 return response;
             }
 
             try
             {
                 this.Tasks.Add(label, new TodoPrototype.Task(label, content));
-                var response = Response(200, "Task created.");
+                var response = Response(200, $"{label} created successfully.");
                 return response;
             }
             catch (Exception e)
             {
-                var response = Response(500, e.Message);
+                var response = Response(500, $"Error: {e.Message} at {e.StackTrace}");
                 return response;
             }
         }
@@ -88,12 +88,12 @@ namespace TodoPrototype
             if (this.Tasks.ContainsKey(label))
             {
                 this.Tasks[label].TaskContent = newContent;
-                var response = Response(200, "Task Edited.");
+                var response = Response(200, $"{label} changed successfully.");
                 return response;
             }
             else
             {
-                var response = Response(500, "That label does not exist.");
+                var response = Response(500, $"{label} does not exist to edit.");
                 return response;
             }
         }
@@ -102,19 +102,19 @@ namespace TodoPrototype
         {
             if (!this.Tasks.ContainsKey(label))
             {
-                var response = Response(500, "No task under that label.");
+                var response = Response(500, $"{label} does not exist, unable to delete.");
                 return response;
             }
 
             try
             {
                 this.Tasks.Remove(label);
-                var response = Response(200, "Task deleted.");
+                var response = Response(200, $"{label} deleted successfully.");
                 return response;
             }
             catch (Exception e)
             {
-                var response = Response(500, e.Message);
+                var response = Response(500, $"Error: {e.Message} at {e.StackTrace}");
                 return response;
             }
         }
@@ -133,7 +133,7 @@ namespace TodoPrototype
             }
             catch (Exception e)
             {
-                var response = Response(500, e.Message);
+                var response = Response(500, $"Error: {e.Message} at {e.StackTrace}");
                 return response;
             }
         }
@@ -141,7 +141,7 @@ namespace TodoPrototype
         public Dictionary<int, string> Load()
         {
             string Path = TaskCollection.ResourcePath.Replace('/', System.IO.Path.DirectorySeparatorChar);
-            var response = Response(200, "");
+            var response = new Dictionary<int, string>();
 
             if (File.Exists(Path))
             {
@@ -152,23 +152,23 @@ namespace TodoPrototype
                     // casting the deserialized object into a dictionary format
                     this.Tasks = (Dictionary<string, Task>) this.Formatter.Deserialize(readStream);
                     readStream.Close();
-                    response[200] = "File load confirmed.";
+                    response = Response(200, "File load confirmed.");
                     return response;
                 }
                 catch (Exception e)
                 {
-                    response[500] = e.Message;
+                    response = Response(500, $"Error: {e.Message} at {e.StackTrace}");
                     return response;
                 }
             }
 
-            response[500] = "File does not exist to load.";
+            response = Response(500, "File does not exist to load.");
             return response;
         }
 
         public Dictionary<int, string> Print(string label = "")
         {
-            var response = Response(200, "");
+            var response = new Dictionary<int, string>();
 
             if (this.Tasks.Count > 0)
             {
@@ -179,7 +179,7 @@ namespace TodoPrototype
                         Console.WriteLine(task.Label + ": " + task.Content);
                     }
 
-                    response[200] = "Tasks returned.";
+                    response = Response(200, "Tasks returned.");
                     return response;
                 }
                 else
@@ -187,17 +187,17 @@ namespace TodoPrototype
                     if (this.Tasks.ContainsKey(label))
                     {
                         Console.WriteLine(String.Format("{0}: {1}\n", Tasks[label].TaskLabel, Tasks[label].TaskContent));
-                        response[200] = "Tasks returned.";
+                        response = Response(200, $"{label} returned.");
                         return response;
                     }
 
-                    response[500] = "No task under that label.";
+                    response = Response(500, $"{label} does not exist.");
                     return response;
                 }
             }
             else
             {
-                response[500] = "No tasks to view.";
+                response = Response(500, "No tasks to view.");
                 return response;
             }
         }

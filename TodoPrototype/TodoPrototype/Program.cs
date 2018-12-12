@@ -28,16 +28,8 @@ namespace TodoPrototype
 
             while (!exitFlag)
             {
-                Console.WriteLine("\nPlease choose from the options below. Please note you can include a \n" +
-                                  "label after the option to use that option on just the task with that label.\n");
-                Console.WriteLine("View");
-                Console.WriteLine("Add");
-                Console.WriteLine("Delete");
-                Console.WriteLine("Edit");
-                Console.WriteLine("Logs");
-                Console.WriteLine("Exit\n");
+                DisplayMenu();
 
-                Console.WriteLine("Current Tasks:");
                 var results = CurrentList.Load();
                 if (results.ContainsKey(500))
                 {
@@ -45,7 +37,7 @@ namespace TodoPrototype
                     return;
                 }
 
-                CurrentList.PrintLabels(); // not returning a dictionary
+                CurrentList.PrintLabels();
 
                 var input = Console.ReadLine().Trim();
                 if (String.IsNullOrWhiteSpace(input))
@@ -57,7 +49,7 @@ namespace TodoPrototype
                
                 string label = "";
                 string content = "";
-                var inputArray = input.Split(' ');
+                var inputArray = input.Split('-');
                 Dictionary<string, string> inputDictionary = new Dictionary<string, string>();
                 inputDictionary["input"] = inputArray[0].Trim().ToUpper();
 
@@ -136,7 +128,13 @@ namespace TodoPrototype
                     case "EDIT":
                         BeepAndClear();
                         Console.WriteLine("Edit");
-                        if (inputDictionary.ContainsKey("label"))
+                        if (inputDictionary.ContainsKey("content") && inputDictionary.ContainsKey("label"))
+                        {
+                            content = inputDictionary["content"];
+                            label = inputDictionary["label"];
+                        }
+
+                        else if (inputDictionary.ContainsKey("label"))
                         {
                             label = inputDictionary["label"];
                         }
@@ -150,8 +148,12 @@ namespace TodoPrototype
                         var labelsCollection = CurrentList.GetLabels();
                         if (labelsCollection.Contains(label))
                         {
-                            Console.Write("New content: ");
-                            content = Console.ReadLine();
+                            if (!inputDictionary.ContainsKey("content"))
+                            {
+                                Console.Write("New content: ");
+                                content = Console.ReadLine();
+                            }
+                            
                             response = CurrentList.Edit(label, content);
                             if (response.ContainsKey(500))
                             {
@@ -177,7 +179,13 @@ namespace TodoPrototype
                     case "ADD":
                         BeepAndClear();
                         Console.WriteLine("Add");
-                        if (inputDictionary.ContainsKey("label"))
+                        if (inputDictionary.ContainsKey("content") && inputDictionary.ContainsKey("label"))
+                        {
+                            content = inputDictionary["content"];
+                            label = inputDictionary["label"];
+                        }
+
+                        else if (inputDictionary.ContainsKey("label"))
                         {
                             label = inputDictionary["label"];
                         }
@@ -186,9 +194,13 @@ namespace TodoPrototype
                             Console.Write("Label: ");
                             label = Console.ReadLine().Trim();
                         }
-                        
-                        Console.Write("Content: ");
-                        content = Console.ReadLine().Trim();
+
+                        if (!inputDictionary.ContainsKey("content"))
+                        {
+                            Console.Write("Content: ");
+                            content = Console.ReadLine().Trim();
+                        }
+                       
                         response = CurrentList.Create(label, content);
                         if (response.ContainsKey(500))
                         {
@@ -219,6 +231,20 @@ namespace TodoPrototype
                         break;
                 }
             }
+        }
+
+        private static void DisplayMenu()
+        {
+            Console.WriteLine("\nPlease choose from the options below using the following syntax:\n" +
+                              "Action or Action-Label or Action-Label-Content. \n");
+            Console.WriteLine("View(-Label)");
+            Console.WriteLine("Add(-Label-Content)");
+            Console.WriteLine("Delete(-Label)");
+            Console.WriteLine("Edit(-Label-Content)");
+            Console.WriteLine("Logs(This is will clear the log file.)");
+            Console.WriteLine("Exit\n");
+
+            Console.WriteLine("Current Tasks:");
         }
 
         public static void BeepAndClear()
