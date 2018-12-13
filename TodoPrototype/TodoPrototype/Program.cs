@@ -19,11 +19,17 @@ namespace TodoPrototype
         {
             TaskCollection CurrentList = TaskCollection.Instance();
             bool exitFlag = false;
-            var logger = Log.Load();
-            if (logger.ContainsKey(500))
             {
-                Console.WriteLine(logger[500]);
-                return;
+                try
+                {
+                    Log.Load();
+                }
+                catch (CustomExceptions e)
+                {
+                    Console.WriteLine($"The following error/s occured when attempting to set up log file.\n{e.Message}");
+                    return;
+                }
+
             }
 
             while (!exitFlag)
@@ -46,10 +52,10 @@ namespace TodoPrototype
                     continue;
                 }
 
-               
                 string label = "";
                 string content = "";
-                var inputArray = input.Split('-');
+                var character = new char[] {' '};
+                var inputArray = input.Split(character, 3, StringSplitOptions.RemoveEmptyEntries);
                 Dictionary<string, string> inputDictionary = new Dictionary<string, string>();
                 inputDictionary["input"] = inputArray[0].Trim().ToUpper();
 
@@ -113,17 +119,16 @@ namespace TodoPrototype
                         response = CurrentList.Delete(label);
                         if (response.ContainsKey(500))
                         {
-                            Console.WriteLine(response[500]);
                             Log.log(response[500]);
                         }
 
                         response = CurrentList.Save();
                         if (response.ContainsKey(500))
                         {
-                            Console.WriteLine(response[500]);
                             Log.log(response[500]);
                         }
 
+                        BeepAndClear();
                         break;
                     case "EDIT":
                         BeepAndClear();
@@ -236,7 +241,7 @@ namespace TodoPrototype
         private static void DisplayMenu()
         {
             Console.WriteLine("\nPlease choose from the options below using the following syntax:\n" +
-                              "Action or Action-Label or Action-Label-Content. \n");
+                              "Action or Action Label or Action Label Content. \n");
             Console.WriteLine("View(-Label)");
             Console.WriteLine("Add(-Label-Content)");
             Console.WriteLine("Delete(-Label)");

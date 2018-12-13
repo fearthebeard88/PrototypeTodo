@@ -19,31 +19,26 @@ namespace TodoPrototype
             return log;
         }
 
-        public static Dictionary<int, string> Load()
+        public static void Load()
         {
-            var response = new Dictionary<int, string>();
             try
             {
-                if (!File.Exists(Log.getLogFile()))
+                if (!File.Exists(getLogFile()))
                 {
-                    var file = File.OpenWrite(Log.getLogFile());
+                    var file = File.OpenWrite(getLogFile());
                     file.Close();
-                    response[200] = "File created and test write is successful.";
                 }
                 else
                 {
-                    var file = File.OpenWrite(Log.getLogFile());
+                    var file = File.OpenWrite(getLogFile());
                     file.Close();
-                    response[200] = "Test write is successful.";
                 }
-
-                return response;
             }
             catch (Exception e)
             {
-                response[500] = e.Message;
-                return response;
+                throw new CustomExceptions($"Error {e.Message} at {e.StackTrace}");
             }
+            
         }
 
         public static Dictionary<int, bool> log(string msg)
