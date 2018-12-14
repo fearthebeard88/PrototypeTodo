@@ -201,5 +201,17 @@ namespace TodoPrototype
                 return response;
             }
         }
+
+        public Task getParentTask(string label)
+        {
+            Task parent;
+            if (Tasks.ContainsKey(label))
+            {
+                parent = Tasks[label];
+                return parent;
+            }
+
+            
+        }
     }
 }

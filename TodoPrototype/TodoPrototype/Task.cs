@@ -11,6 +11,8 @@ namespace TodoPrototype
     {
         public string TaskLabel;
         public string TaskContent;
+        public Task Parent;
+        public Task Child;
 
         public Task(string TaskLabel = " ", string TaskContent = " ")
         {
@@ -28,6 +30,18 @@ namespace TodoPrototype
         {
             get { return this.TaskContent; }
             set { this.TaskContent = value; }
+        }
+
+        public Task TaskParent
+        {
+            get { return this.Parent; }
+            set { this.Parent = value; }
+        }
+
+        public Task TaskChild
+        {
+            get { return this.Child; }
+            set { this.Child = value; }
         }
     }
 }
