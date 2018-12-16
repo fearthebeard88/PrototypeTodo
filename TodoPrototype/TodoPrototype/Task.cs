@@ -43,5 +43,17 @@ namespace TodoPrototype
             get { return this.Child; }
             set { this.Child = value; }
         }
+
+        public string ParentLabel
+        {
+            get { return this.TaskParent.Label; }
+            set { this.TaskParent.Label = value; }
+        }
+
+        public string ChildLabel
+        {
+            get { return this.TaskChild.Label; }
+            set { this.TaskChild.Label = value; }
+        }
     }
 }

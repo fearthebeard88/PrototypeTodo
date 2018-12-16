@@ -243,5 +243,13 @@ namespace TodoPrototype
                 Tasks[childLabel].TaskParent = Tasks[parentLabel];
             }
         }
+
+        public void unsetParentTask(string childLabel)
+        {
+            if (Tasks.ContainsKey(childLabel) && Tasks.ContainsKey())
+            {
+
+            }
+        }
     }
 }
