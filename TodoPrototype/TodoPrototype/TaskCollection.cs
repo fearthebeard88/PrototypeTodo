@@ -204,14 +204,44 @@ namespace TodoPrototype
 
         public Task getParentTask(string label)
         {
-            Task parent;
+                Task parent;
+                if (Tasks.ContainsKey(label))
+                {
+                    parent = Tasks[label];
+                    return parent;
+                }
+
+            return null;
+        }
+
+        public Task getChildTask(string label)
+        {
+            Task child;
             if (Tasks.ContainsKey(label))
             {
-                parent = Tasks[label];
-                return parent;
+                child = Tasks[label];
+                return child;
             }
 
-            
+            return null;
+        }
+
+        public void setParentTask(string parentLabel, string childLabel)
+        {
+            if (Tasks.ContainsKey(parentLabel) && Tasks.ContainsKey(childLabel))
+            {
+                Tasks[childLabel].TaskParent = Tasks[parentLabel];
+                Tasks[parentLabel].TaskChild = Tasks[childLabel];
+            }
+        }
+
+        public void setChildTask(string childLabel, string parentLabel)
+        {
+            if (Tasks.ContainsKey(childLabel) && Tasks.ContainsKey(parentLabel))
+            {
+                Tasks[parentLabel].TaskChild = Tasks[childLabel];
+                Tasks[childLabel].TaskParent = Tasks[parentLabel];
+            }
         }
     }
 }
