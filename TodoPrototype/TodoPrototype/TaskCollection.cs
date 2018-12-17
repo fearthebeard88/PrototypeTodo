@@ -202,53 +202,39 @@ namespace TodoPrototype
             }
         }
 
-        public Task getParentTask(string label)
+        public Task getParentTask(Task child)
         {
-                Task parent;
-                if (Tasks.ContainsKey(label))
-                {
-                    parent = Tasks[label];
-                    return parent;
-                }
-
-            return null;
-        }
-
-        public Task getChildTask(string label)
-        {
-            Task child;
-            if (Tasks.ContainsKey(label))
+            if (Tasks.ContainsKey(child.Label) && Tasks[child.Label].TaskParent != null)
             {
-                child = Tasks[label];
-                return child;
+                return Tasks[child.Label].TaskParent;
             }
 
             return null;
         }
 
-        public void setParentTask(string parentLabel, string childLabel)
+        public void setParentTask(Task child, Task parent)
         {
-            if (Tasks.ContainsKey(parentLabel) && Tasks.ContainsKey(childLabel))
+            if (Tasks.ContainsKey(child.Label) && Tasks.ContainsKey(parent.Label))
             {
-                Tasks[childLabel].TaskParent = Tasks[parentLabel];
-                Tasks[parentLabel].TaskChild = Tasks[childLabel];
+                Tasks[child.Label].TaskParent = parent;
             }
         }
 
-        public void setChildTask(string childLabel, string parentLabel)
+        public Task getChildTask(string childLabel, Task parent)
         {
-            if (Tasks.ContainsKey(childLabel) && Tasks.ContainsKey(parentLabel))
+            if (Tasks.ContainsKey(childLabel) && Tasks.ContainsKey(parent.Label))
             {
-                Tasks[parentLabel].TaskChild = Tasks[childLabel];
-                Tasks[childLabel].TaskParent = Tasks[parentLabel];
+                return Tasks[parent.Label].getChild(childLabel);
             }
+
+            return null;
         }
 
-        public void unsetParentTask(string childLabel)
+        public void setChildTask(string childLabel, Task parent)
         {
-            if (Tasks.ContainsKey(childLabel) && Tasks.ContainsKey())
+            if (Tasks.ContainsKey(childLabel) && Tasks.ContainsKey(parent.Label))
             {
-
+                Tasks[parent.Label].setChild(childLabel, parent);
             }
         }
     }

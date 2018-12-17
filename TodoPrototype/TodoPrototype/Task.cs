@@ -12,7 +12,7 @@ namespace TodoPrototype
         public string TaskLabel;
         public string TaskContent;
         public Task Parent;
-        public Task Child;
+        public Dictionary<string, Task> Child = new Dictionary<string, Task>();
 
         public Task(string TaskLabel = " ", string TaskContent = " ")
         {
@@ -35,25 +35,22 @@ namespace TodoPrototype
         public Task TaskParent
         {
             get { return this.Parent; }
-            set { this.Parent = value; }
+            set { this.TaskParent = value; }
         }
 
-        public Task TaskChild
+        public void setChild(string label, Task Child)
         {
-            get { return this.Child; }
-            set { this.Child = value; }
+            this.Child[label] = Child;
         }
 
-        public string ParentLabel
+        public Task getChild(string label)
         {
-            get { return this.TaskParent.Label; }
-            set { this.TaskParent.Label = value; }
-        }
+            if (this.Child.ContainsKey(label))
+            {
+                return Child[label];
+            }
 
-        public string ChildLabel
-        {
-            get { return this.TaskChild.Label; }
-            set { this.TaskChild.Label = value; }
+            return null;
         }
     }
 }
