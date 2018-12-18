@@ -52,5 +52,10 @@ namespace TodoPrototype
 
             return null;
         }
+
+        public string getChildLabel(Task child)
+        {
+            return child.Label;
+        }
     }
 }

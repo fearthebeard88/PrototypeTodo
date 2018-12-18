@@ -8,6 +8,7 @@ using System.Linq.Expressions;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.SqlServer.Server;
 
 namespace TodoPrototype
 {
@@ -221,6 +222,16 @@ namespace TodoPrototype
                         }
 
                         break;
+                    case "CHILDREN":
+                        DisplayChildrenMenu();
+                        CurrentList.printTasksWithChildren();
+                        var childInput = Console.ReadLine().Trim().ToUpper();
+                        if (!String.IsNullOrWhiteSpace(childInput))
+                        {
+
+                        }
+
+                        break;
                     case "LOGS":
                         Console.WriteLine("Deleting logs file now.");
                         Log.DeleteLogs();
@@ -246,10 +257,25 @@ namespace TodoPrototype
             Console.WriteLine("Add(-Label-Content)");
             Console.WriteLine("Delete(-Label)");
             Console.WriteLine("Edit(-Label-Content)");
+            Console.WriteLine("Children");
             Console.WriteLine("Logs(This is will clear the log file.)");
             Console.WriteLine("Exit\n");
 
             Console.WriteLine("Current Tasks:");
+        }
+
+        public static void DisplayChildrenMenu()
+        {
+            BeepAndClear();
+            Console.WriteLine("\nChoose from the actions below to modify a tasks child.\n");
+            Console.WriteLine("View(-Label)");
+            Console.WriteLine("Add(-Label-Content)");
+            Console.WriteLine("Delete(-Label)");
+            Console.WriteLine("Edit(-Label-Content)");
+            Console.WriteLine("Parent");
+            Console.WriteLine("Back");
+
+            Console.WriteLine("Current Tasks with Children: \n");
         }
 
         public static void BeepAndClear()

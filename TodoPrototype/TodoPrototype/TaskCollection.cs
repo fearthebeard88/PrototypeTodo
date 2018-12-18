@@ -1,6 +1,7 @@
 ﻿using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -176,7 +177,18 @@ namespace TodoPrototype
                 {
                     foreach (Task task in Tasks.Values)
                     {
-                        Console.WriteLine(task.Label + ": " + task.Content);
+                        if (!(task.Child.Count > 0))
+                        {
+                            Console.WriteLine(task.Label + ": " + task.Content + "-> No child tasks.");
+                        }
+                        else
+                        {
+                            var childrenLabels = this.getChildLabels(task);
+                            foreach (var child in childrenLabels)
+                            {
+                                Console.WriteLine(task.Label + ": " + task.Content + "->Child task: " + child);
+                            }
+                        }
                     }
 
                     response = Response(200, "Tasks returned.");
@@ -235,6 +247,50 @@ namespace TodoPrototype
             if (Tasks.ContainsKey(childLabel) && Tasks.ContainsKey(parent.Label))
             {
                 Tasks[parent.Label].setChild(childLabel, parent);
+            }
+        }
+
+        public string[] getChildLabels(Task parent)
+        {
+            if (Tasks.ContainsKey(parent.Label) && parent.Child.Count > 0)
+            {
+                var childLabels = new string[parent.Child.Count];
+                var children = parent.Child.Values.ToArray();
+                for (int i = 0; i < children.Length; i++)
+                {
+                    childLabels[i] = children[i].Label;
+                }
+
+                return childLabels;
+            }
+
+            return null;
+        }
+
+        public bool hasChildren(Task parent)
+        {
+            if (parent.Child.Count > 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public void printTasksWithChildren()
+        {
+            if (!(Tasks.Count > 0))
+            {
+                Console.WriteLine("No tasks to display.");
+                return;
+            }
+
+            foreach (var task in Tasks.Values)
+            {
+                if (this.hasChildren(task))
+                {
+                    Console.WriteLine($"{task.Label}: {task.Content}");
+                }
             }
         }
     }
