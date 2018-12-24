@@ -30,7 +30,6 @@ namespace TodoPrototype
                     Console.WriteLine($"The following error/s occured when attempting to set up log file.\n{e.Message}");
                     return;
                 }
-
             }
 
             while (!exitFlag)
@@ -223,12 +222,13 @@ namespace TodoPrototype
 
                         break;
                     case "CHILDREN":
+                        BeepAndClear();
                         DisplayChildrenMenu();
                         CurrentList.printTasksWithChildren();
-                        var childInput = Console.ReadLine().Trim().ToUpper();
+                        var childInput = Console.ReadLine().Trim();
                         if (!String.IsNullOrWhiteSpace(childInput))
                         {
-
+                            RunChildInput(childInput, ref CurrentList);
                         }
 
                         break;
@@ -249,13 +249,51 @@ namespace TodoPrototype
             }
         }
 
+        private static void RunChildInput(string childInput, ref TaskCollection CurrentList)
+        {
+            if (String.IsNullOrWhiteSpace(childInput))
+            {
+                Log.log("Input is not valid for child actions.");
+            }
+
+            var delimiter = new char[] {' '};
+            var inputArray = childInput.Split(delimiter,3, StringSplitOptions.RemoveEmptyEntries);
+
+            switch (inputArray[0].ToUpper())
+            {
+                case "VIEW":
+                    CurrentList.printTasksWithChildren();
+                    break;
+                case "ADD":
+                    Console.WriteLine("Label of parent task: ");
+                    var parent = Console.ReadLine().Trim();
+                    Console.WriteLine("Label of child: ");
+                    var child = Console.ReadLine().Trim();
+                    CurrentList.setChildTask(CurrentList.Tasks[parent], CurrentList.Tasks[child]);
+                    CurrentList.Save();
+                    break;
+                case "DELETE":
+                    throw new NotImplementedException();
+                    break;
+                case "EDIT":
+                    throw new NotImplementedException();
+                    break;
+                case "PARENT":
+                    throw new NotImplementedException();
+                    break;
+                case "BACK":
+                    throw new NotImplementedException();
+                    break;
+            }
+        }
+
         private static void DisplayMenu()
         {
             Console.WriteLine("\nPlease choose from the options below using the following syntax:\n" +
                               "Action or Action Label or Action Label Content. \n");
-            Console.WriteLine("View(-Label)");
-            Console.WriteLine("Add(-Label-Content)");
-            Console.WriteLine("Delete(-Label)");
+            Console.WriteLine("View(Include optional label)");
+            Console.WriteLine("Add(Include optional label or label with content)");
+            Console.WriteLine("Delete(Include optional label)");
             Console.WriteLine("Edit(-Label-Content)");
             Console.WriteLine("Children");
             Console.WriteLine("Logs(This is will clear the log file.)");
@@ -264,7 +302,7 @@ namespace TodoPrototype
             Console.WriteLine("Current Tasks:");
         }
 
-        public static void DisplayChildrenMenu()
+        private static void DisplayChildrenMenu()
         {
             BeepAndClear();
             Console.WriteLine("\nChoose from the actions below to modify a tasks child.\n");
@@ -278,7 +316,7 @@ namespace TodoPrototype
             Console.WriteLine("Current Tasks with Children: \n");
         }
 
-        public static void BeepAndClear()
+        private static void BeepAndClear()
         {
             Console.Clear();
             Console.Beep();

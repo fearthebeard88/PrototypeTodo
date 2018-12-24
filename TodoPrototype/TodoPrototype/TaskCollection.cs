@@ -14,7 +14,7 @@ namespace TodoPrototype
     class TaskCollection
     {
         private static TaskCollection taskCollection;
-        private Dictionary<string, Task> Tasks;
+        public Dictionary<string, Task> Tasks;
         private BinaryFormatter Formatter;
         private const string ResourcePath = @"C://C#Basics/Prototype/TodoPrototype/PrototypeFiles/Todo.txt";
 
@@ -218,7 +218,7 @@ namespace TodoPrototype
         {
             if (Tasks.ContainsKey(child.Label) && Tasks[child.Label].TaskParent != null)
             {
-                return Tasks[child.Label].TaskParent;
+                return child.Parent;
             }
 
             return null;
@@ -228,7 +228,7 @@ namespace TodoPrototype
         {
             if (Tasks.ContainsKey(child.Label) && Tasks.ContainsKey(parent.Label))
             {
-                Tasks[child.Label].TaskParent = parent;
+                child.Parent = parent;
             }
         }
 
@@ -236,7 +236,7 @@ namespace TodoPrototype
         {
             if (Tasks.ContainsKey(childLabel) && Tasks.ContainsKey(parent.Label))
             {
-                return Tasks[parent.Label].getChild(childLabel);
+                return parent.getChild(childLabel);
             }
 
             return null;
@@ -246,7 +246,7 @@ namespace TodoPrototype
         {
             if (Tasks.ContainsKey(childLabel) && Tasks.ContainsKey(parent.Label))
             {
-                Tasks[parent.Label].setChild(childLabel, parent);
+                parent.setChild(childLabel, Tasks[childLabel]);
             }
         }
 
@@ -291,6 +291,15 @@ namespace TodoPrototype
                 {
                     Console.WriteLine($"{task.Label}: {task.Content}");
                 }
+            }
+        }
+
+        public void setChildTask(Task parent, Task child)
+        {
+            if (Tasks.ContainsKey(parent.Label) && Tasks.ContainsKey(child.Label) && Tasks[parent.Label].Child.ContainsKey(child.Label))
+            {
+                parent.setChild(child.Label, child);
+                child.Parent = parent;
             }
         }
     }
