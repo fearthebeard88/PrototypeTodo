@@ -223,14 +223,30 @@ namespace TodoPrototype
                         break;
                     case "CHILDREN":
                         BeepAndClear();
-                        DisplayChildrenMenu();
-                        CurrentList.printTasksWithChildren();
-                        var childInput = Console.ReadLine().Trim();
-                        if (!String.IsNullOrWhiteSpace(childInput))
-                        {
-                            RunChildInput(childInput, ref CurrentList);
-                        }
 
+                        var exit = false;
+                        while (!exit)
+                        {
+                            Console.WriteLine("Please pick an option from the parent/child task menu.\n");
+
+
+                            DisplayChildrenMenu();
+                            CurrentList.printTasksWithChildren();
+                            var childInput = Console.ReadLine().Trim();
+                            if (!String.IsNullOrWhiteSpace(childInput))
+                            {
+                                var delimiter = new char[] { ' ' };
+                                var childInputArray = childInput.Split(delimiter, 3, StringSplitOptions.RemoveEmptyEntries);
+                                if (childInputArray[0].ToUpper() == "BACK")
+                                {
+                                    break;
+                                }
+
+                                BeepAndClear();
+                                RunChildInput(childInputArray, ref CurrentList);
+                            }
+                        }
+                       
                         break;
                     case "LOGS":
                         Console.WriteLine("Deleting logs file now.");
@@ -249,31 +265,45 @@ namespace TodoPrototype
             }
         }
 
-        private static void RunChildInput(string childInput, ref TaskCollection CurrentList)
+        private static void RunChildInput(string[] childInputArray, ref TaskCollection CurrentList)
         {
-            if (String.IsNullOrWhiteSpace(childInput))
+            var input = childInputArray[0].ToUpper();
+            string label;
+            string content;
+            if (childInputArray.Length == 3)
             {
-                Log.log("Input is not valid for child actions.");
+                label = childInputArray[1];
+                content = childInputArray[2];
+            }
+            else if (childInputArray.Length == 2)
+            {
+                label = childInputArray[1];
             }
 
-            var delimiter = new char[] {' '};
-            var inputArray = childInput.Split(delimiter,3, StringSplitOptions.RemoveEmptyEntries);
+            string parent;
+            string child;
 
-            switch (inputArray[0].ToUpper())
+            switch (input)
             {
                 case "VIEW":
-                    CurrentList.printTasksWithChildren();
+                    CurrentList.printFullChildTasks();
+                    Console.WriteLine();
                     break;
                 case "ADD":
                     Console.WriteLine("Label of parent task: ");
-                    var parent = Console.ReadLine().Trim();
+                    parent = Console.ReadLine().Trim();
                     Console.WriteLine("Label of child: ");
                     var child = Console.ReadLine().Trim();
                     CurrentList.setChildTask(CurrentList.Tasks[parent], CurrentList.Tasks[child]);
                     CurrentList.Save();
                     break;
                 case "DELETE":
-                    throw new NotImplementedException();
+                    Console.WriteLine("Label of parent task: ");
+                    parent = Console.ReadLine().Trim();
+                    CurrentList.printTasksWithChildren();
+                    Console.WriteLine("Label of child to be deleted: ");
+                    CurrentList.printTasksWithChildren();
+                    CurrentList.RemoveChild(parent, child)
                     break;
                 case "EDIT":
                     throw new NotImplementedException();
@@ -281,8 +311,8 @@ namespace TodoPrototype
                 case "PARENT":
                     throw new NotImplementedException();
                     break;
-                case "BACK":
-                    throw new NotImplementedException();
+                default:
+                    Console.WriteLine("Input not accepted, please try again.");
                     break;
             }
         }
@@ -304,14 +334,13 @@ namespace TodoPrototype
 
         private static void DisplayChildrenMenu()
         {
-            BeepAndClear();
             Console.WriteLine("\nChoose from the actions below to modify a tasks child.\n");
-            Console.WriteLine("View(-Label)");
-            Console.WriteLine("Add(-Label-Content)");
-            Console.WriteLine("Delete(-Label)");
-            Console.WriteLine("Edit(-Label-Content)");
-            Console.WriteLine("Parent");
-            Console.WriteLine("Back");
+            Console.WriteLine("View(Shows all tasks with children)");
+            Console.WriteLine("Add(Creates a child task on a parent task)");
+            Console.WriteLine("Delete(Removes a child from a parent task)");
+            Console.WriteLine("Edit(Modifies a child task on a parent task)");
+            Console.WriteLine("View the parent of a child task");
+            Console.WriteLine("Back(Go back to the main menu");
 
             Console.WriteLine("Current Tasks with Children: \n");
         }

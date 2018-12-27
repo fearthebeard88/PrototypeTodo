@@ -289,18 +289,47 @@ namespace TodoPrototype
             {
                 if (this.hasChildren(task))
                 {
-                    Console.WriteLine($"{task.Label}: {task.Content}");
+                    Console.Write($"{task.Label}: ");
+                    foreach (var child in task.Child)
+                    {
+                        Console.WriteLine(child.Key);
+                    }
                 }
             }
         }
 
         public void setChildTask(Task parent, Task child)
         {
-            if (Tasks.ContainsKey(parent.Label) && Tasks.ContainsKey(child.Label) && Tasks[parent.Label].Child.ContainsKey(child.Label))
+            if (Tasks.ContainsKey(parent.Label) && Tasks.ContainsKey(child.Label))
             {
                 parent.setChild(child.Label, child);
                 child.Parent = parent;
             }
+        }
+
+        internal void printFullChildTasks()
+        {
+            if (Tasks.Count > 0)
+            {
+                foreach (var task in Tasks.Values)
+                {
+                    if (hasChildren(task))
+                    {
+                        Console.Write($"{task.Label}: ");
+                        foreach (var child in task.Child)
+                        {
+                            var childLabel = child.Value.getChildLabel(child.Value);
+                            var childContent = child.Value.Content;
+                            Console.WriteLine($"{childLabel}: {childContent}");
+                        }
+                    }
+                }
+            }
+        }
+
+        internal void RemoveChild(string parent, string child)
+        {
+            
         }
     }
 }
