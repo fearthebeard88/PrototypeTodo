@@ -335,32 +335,102 @@ namespace TodoPrototype
                     BeepAndClear();
                     break;
                 case "DELETE":
-                    Console.WriteLine("Label of parent task: ");
-                    CurrentList.printTasksWithChildren();
-                    parent = Console.ReadLine().Trim();
-                    Console.WriteLine("Label of child to be deleted: ");
-                    CurrentList.printTasksWithChildren();
-                    child = Console.ReadLine().Trim();
+                    if (inputDictionary.ContainsKey("parent") && inputDictionary.ContainsKey("child"))
+                    {
+                        parent = inputDictionary["parent"];
+                        child = inputDictionary["child"];
+                    }
+                    else if (inputDictionary.ContainsKey("parent"))
+                    {
+                        parent = inputDictionary["parent"];
+                        Console.WriteLine("Label of child to be deleted: ");
+                        CurrentList.printTasksWithChildren();
+                        child = Console.ReadLine().Trim();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Label of parent task: ");
+                        CurrentList.printTasksWithChildren();
+                        parent = Console.ReadLine().Trim();
+                        Console.WriteLine("Label of child to be deleted: ");
+                        CurrentList.printTasksWithChildren();
+                        child = Console.ReadLine().Trim();
+                    }
+
+                    if (String.IsNullOrWhiteSpace(parent) || String.IsNullOrWhiteSpace(child))
+                    {
+                        Console.WriteLine("Input not accepted, please specify a parent label and child label for this action.");
+                        return;
+                    }
+                    
                     CurrentList.RemoveChild(parent, child);
                     BeepAndClear();
                     break;
                 case "EDIT":
-                    Console.WriteLine("Label of parent task: ");
-                    CurrentList.printTasksWithChildren();
-                    parent = Console.ReadLine().Trim();
-                    Console.WriteLine("Label of child task to be edited: ");
-                    CurrentList.printTasksWithChildren();
-                    child = Console.ReadLine().Trim();
-                    Console.WriteLine("New content: ");
-                    var childContent = Console.ReadLine().Trim();
-                    CurrentList.editChildTask(parent, child, childContent);
+                    if (inputDictionary.ContainsKey("parent") && inputDictionary.ContainsKey("child") &&
+                        inputDictionary.ContainsKey("content"))
+                    {
+                        parent = inputDictionary["parent"];
+                        child = inputDictionary["child"];
+                        content = inputDictionary["content"];
+                    }
+                    else if (inputDictionary.ContainsKey("parent") && inputDictionary.ContainsKey("child"))
+                    {
+                        parent = inputDictionary["parent"];
+                        child = inputDictionary["child"];
+                        Console.WriteLine("New content: ");
+                        content = Console.ReadLine().Trim();
+                    }
+                    else if (inputDictionary.ContainsKey("parent"))
+                    {
+                        parent = inputDictionary["parent"];
+                        Console.WriteLine("Label of child task to be edited: ");
+                        CurrentList.printTasksWithChildren();
+                        child = Console.ReadLine().Trim();
+                        Console.WriteLine("New content: ");
+                        content = Console.ReadLine().Trim();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Label of parent task: ");
+                        CurrentList.printTasksWithChildren();
+                        parent = Console.ReadLine().Trim();
+                        Console.WriteLine("Label of child task to be edited: ");
+                        CurrentList.printTasksWithChildren();
+                        child = Console.ReadLine().Trim();
+                        Console.WriteLine("New content: ");
+                        content = Console.ReadLine().Trim();
+                    }
+
+                    if (String.IsNullOrWhiteSpace(parent) || String.IsNullOrWhiteSpace(child) ||
+                        String.IsNullOrWhiteSpace(content))
+                    {
+                        Console.WriteLine("Input not accepted, please specify a parent label and child label and content for this action.");
+                        return;
+                    }
+                    
+                    CurrentList.editChildTask(parent, child, content);
                     CurrentList.Save();
                     BeepAndClear();
                     break;
                 case "PARENT":
-                    Console.WriteLine("Label of child task: ");
-                    CurrentList.printTasksWithChildren();
-                    child = Console.ReadLine().Trim();
+                    if (inputDictionary.ContainsKey("parent"))
+                    {
+                        child = inputDictionary["parent"];
+                    }
+                    else
+                    {
+                        Console.WriteLine("Label of child task: ");
+                        CurrentList.printTasksWithChildren();
+                        child = Console.ReadLine().Trim();
+                    }
+
+                    if (String.IsNullOrWhiteSpace(child))
+                    {
+                        Console.WriteLine("Input not accepted, please specify a child label for this action.");
+                        return;
+                    }
+                    
                     CurrentList.printParentTask(child);
                     break;
                 default:
