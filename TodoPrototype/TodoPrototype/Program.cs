@@ -14,8 +14,6 @@ namespace TodoPrototype
 {
     class Program
     {
-        // PrintLabels is the only method that does not return anything
-
         static void Main(string[] args)
         {
             TaskCollection CurrentList = TaskCollection.Instance();

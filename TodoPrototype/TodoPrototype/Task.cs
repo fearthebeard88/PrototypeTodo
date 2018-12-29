@@ -11,7 +11,7 @@ namespace TodoPrototype
     {
         public string TaskLabel;
         public string TaskContent;
-        public Task Parent;
+        public Task Parent = null;
         public Dictionary<string, Task> Child = new Dictionary<string, Task>();
 
         public Task(string TaskLabel = " ", string TaskContent = " ")

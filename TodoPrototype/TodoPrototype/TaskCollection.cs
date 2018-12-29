@@ -28,7 +28,7 @@ namespace TodoPrototype
             return taskCollection;
         }
 
-        public Dictionary<int, string> Response(int code, string msg)
+        internal Dictionary<int, string> Response(int code, string msg)
         {
             var Response = new Dictionary<int, string>();
             Response[code] = msg;
@@ -42,7 +42,7 @@ namespace TodoPrototype
             this.Formatter = new BinaryFormatter();
         }
 
-        public void PrintLabels()
+        internal void PrintLabels()
         {
             if (this.Tasks.Count > 0)
             {
@@ -57,7 +57,7 @@ namespace TodoPrototype
             }
         }
 
-        public Dictionary<int, string> Create(string label, string content)
+        internal Dictionary<int, string> Create(string label, string content)
         {
             if (this.Tasks.ContainsKey(label))
             {
@@ -78,13 +78,13 @@ namespace TodoPrototype
             }
         }
 
-        public Dictionary<string, Task>.KeyCollection GetLabels()
+        internal Dictionary<string, Task>.KeyCollection GetLabels()
         {
             var labels = Tasks.Keys;
             return labels;
         }
 
-        public Dictionary<int, string> Edit(string label, string newContent)
+        internal Dictionary<int, string> Edit(string label, string newContent)
         {
             if (this.Tasks.ContainsKey(label))
             {
@@ -99,7 +99,7 @@ namespace TodoPrototype
             }
         }
 
-        public Dictionary<int, string> Delete(string label)
+        internal Dictionary<int, string> Delete(string label)
         {
             if (!this.Tasks.ContainsKey(label))
             {
@@ -120,7 +120,7 @@ namespace TodoPrototype
             }
         }
 
-        public Dictionary<int, string> Save()
+        internal Dictionary<int, string> Save()
         {
             string Path = TaskCollection.ResourcePath.Replace('/', System.IO.Path.DirectorySeparatorChar);
 
@@ -139,7 +139,7 @@ namespace TodoPrototype
             }
         }
 
-        public Dictionary<int, string> Load()
+        internal Dictionary<int, string> Load()
         {
             string Path = TaskCollection.ResourcePath.Replace('/', System.IO.Path.DirectorySeparatorChar);
             var response = new Dictionary<int, string>();
@@ -167,7 +167,7 @@ namespace TodoPrototype
             return response;
         }
 
-        public Dictionary<int, string> Print(string label = "")
+        internal Dictionary<int, string> Print(string label = "")
         {
             var response = new Dictionary<int, string>();
 
@@ -198,7 +198,7 @@ namespace TodoPrototype
                 {
                     if (this.Tasks.ContainsKey(label))
                     {
-                        Console.WriteLine(String.Format("{0}: {1}\n", Tasks[label].TaskLabel, Tasks[label].TaskContent));
+                        Console.WriteLine($"{Tasks[label].TaskLabel}: {Tasks[label].TaskContent}\n");
                         response = Response(200, $"{label} returned.");
                         return response;
                     }
@@ -214,43 +214,7 @@ namespace TodoPrototype
             }
         }
 
-        public Task getParentTask(Task child)
-        {
-            if (Tasks.ContainsKey(child.Label) && Tasks[child.Label].TaskParent != null)
-            {
-                return child.Parent;
-            }
-
-            return null;
-        }
-
-        public void setParentTask(Task child, Task parent)
-        {
-            if (Tasks.ContainsKey(child.Label) && Tasks.ContainsKey(parent.Label))
-            {
-                child.Parent = parent;
-            }
-        }
-
-        public Task getChildTask(string childLabel, Task parent)
-        {
-            if (Tasks.ContainsKey(childLabel) && Tasks.ContainsKey(parent.Label))
-            {
-                return parent.getChild(childLabel);
-            }
-
-            return null;
-        }
-
-        public void setChildTask(string childLabel, Task parent)
-        {
-            if (Tasks.ContainsKey(childLabel) && Tasks.ContainsKey(parent.Label))
-            {
-                parent.setChild(childLabel, Tasks[childLabel]);
-            }
-        }
-
-        public string[] getChildLabels(Task parent)
+        internal string[] getChildLabels(Task parent)
         {
             if (Tasks.ContainsKey(parent.Label) && parent.Child.Count > 0)
             {
@@ -267,7 +231,7 @@ namespace TodoPrototype
             return null;
         }
 
-        public bool hasChildren(Task parent)
+        internal bool hasChildren(Task parent)
         {
             if (parent.Child.Count > 0)
             {
@@ -277,7 +241,7 @@ namespace TodoPrototype
             return false;
         }
 
-        public void printTasksWithChildren()
+        internal void printTasksWithChildren()
         {
             if (!(Tasks.Count > 0))
             {
@@ -298,9 +262,9 @@ namespace TodoPrototype
             }
         }
 
-        public void setChildTask(Task parent, Task child)
+        internal void setChildTask(Task parent, Task child)
         {
-            if (Tasks.ContainsKey(parent.Label) && Tasks.ContainsKey(child.Label))
+            if (Tasks.ContainsKey(parent.Label) && Tasks.ContainsKey(child.Label) && Tasks[child.Label].Parent == null)
             {
                 parent.setChild(child.Label, child);
                 child.Parent = parent;
@@ -332,6 +296,7 @@ namespace TodoPrototype
             if (Tasks.ContainsKey(parent) && Tasks.ContainsKey(child))
             {
                 Tasks[parent].Child.Remove(Tasks[child].Label);
+                Tasks[child].Parent = null;
             }
         }
 
