@@ -236,7 +236,7 @@ namespace TodoPrototype
                             if (!String.IsNullOrWhiteSpace(childInput))
                             {
                                 var delimiter = new char[] { ' ' };
-                                var childInputArray = childInput.Split(delimiter, 3, StringSplitOptions.RemoveEmptyEntries);
+                                var childInputArray = childInput.Split(delimiter, 4, StringSplitOptions.RemoveEmptyEntries);
                                 if (childInputArray[0].ToUpper() == "BACK")
                                 {
                                     BeepAndClear();
@@ -270,36 +270,66 @@ namespace TodoPrototype
         {
             Dictionary<string, string> inputDictionary = new Dictionary<string, string>();
             inputDictionary["input"] = childInputArray[0].ToUpper();
-            if (childInputArray.Length == 3)
+            if (childInputArray.Length == 4)
             {
-                inputDictionary["label"] = childInputArray[1];
-                inputDictionary["content"] = childInputArray[2];
+                inputDictionary["parent"] = childInputArray[1];
+                inputDictionary["child"] = childInputArray[2];
+                inputDictionary["content"] = childInputArray[3];
+            }
+            else if (childInputArray.Length == 3)
+            {
+                inputDictionary["parent"] = childInputArray[1];
+                inputDictionary["child"] = childInputArray[2];
             }
             else if (childInputArray.Length == 2)
             {
-                inputDictionary["label"] = childInputArray[1];
+                inputDictionary["parent"] = childInputArray[1];
+            }
+            else if (childInputArray.Length > 4)
+            {
+                Console.WriteLine("Too many arguments.");
+                return;
             }
 
             string parent;
             string child;
+            string content;
 
-            switch (inputDictionary["label"])
+            switch (inputDictionary["input"])
             {
                 case "VIEW":
                     CurrentList.printFullChildTasks();
                     Console.WriteLine();
                     break;
                 case "ADD":
-                    if (inputDictionary.ContainsKey("label") && inputDictionary.ContainsKey("content"))
+                    if (inputDictionary.ContainsKey("parent") && inputDictionary.ContainsKey("child"))
                     {
-
+                        parent = inputDictionary["parent"];
+                        child = inputDictionary["child"];
                     }
-                    Console.WriteLine("Label of parent task: ");
-                    CurrentList.PrintLabels();
-                    parent = Console.ReadLine().Trim();
-                    Console.WriteLine("Label of child: ");
-                    CurrentList.PrintLabels();
-                    child = Console.ReadLine().Trim();
+                    else if (inputDictionary.ContainsKey("parent"))
+                    {
+                        parent = inputDictionary["parent"];
+                        Console.WriteLine("Label of child: ");
+                        CurrentList.PrintLabels();
+                        child = Console.ReadLine().Trim();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Label of parent task: ");
+                        CurrentList.PrintLabels();
+                        parent = Console.ReadLine().Trim();
+                        Console.WriteLine("Label of child: ");
+                        CurrentList.PrintLabels();
+                        child = Console.ReadLine().Trim();
+                    }
+
+                    if (String.IsNullOrWhiteSpace(parent) || String.IsNullOrWhiteSpace(child))
+                    {
+                        Console.WriteLine("Input not accepted, please specify a parent label and child label for this action.");
+                        return;
+                    }
+                    
                     CurrentList.setChildTask(CurrentList.Tasks[parent], CurrentList.Tasks[child]);
                     CurrentList.Save();
                     BeepAndClear();
@@ -358,10 +388,10 @@ namespace TodoPrototype
         {
             Console.WriteLine("\nChoose from the actions below to modify a tasks child.\n");
             Console.WriteLine("View(Shows all tasks with children)");
-            Console.WriteLine("Add(Creates a child task on a parent task)");
-            Console.WriteLine("Delete(Removes a child from a parent task)");
-            Console.WriteLine("Edit(Modifies a child task on a parent task)");
-            Console.WriteLine("View the parent of a child task");
+            Console.WriteLine("Add(Include optional parent label and child label)");
+            Console.WriteLine("Delete(Include optional parent label and child label)");
+            Console.WriteLine("Edit(Include optional parent label, child label, and content)");
+            Console.WriteLine("Parent(Include optional child label)");
             Console.WriteLine("Back(Go back to the main menu");
 
             Console.WriteLine("Current Tasks with Children: \n");
