@@ -239,6 +239,7 @@ namespace TodoPrototype
                                 var childInputArray = childInput.Split(delimiter, 3, StringSplitOptions.RemoveEmptyEntries);
                                 if (childInputArray[0].ToUpper() == "BACK")
                                 {
+                                    BeepAndClear();
                                     break;
                                 }
 
@@ -267,49 +268,70 @@ namespace TodoPrototype
 
         private static void RunChildInput(string[] childInputArray, ref TaskCollection CurrentList)
         {
-            var input = childInputArray[0].ToUpper();
-            string label;
-            string content;
+            Dictionary<string, string> inputDictionary = new Dictionary<string, string>();
+            inputDictionary["input"] = childInputArray[0].ToUpper();
             if (childInputArray.Length == 3)
             {
-                label = childInputArray[1];
-                content = childInputArray[2];
+                inputDictionary["label"] = childInputArray[1];
+                inputDictionary["content"] = childInputArray[2];
             }
             else if (childInputArray.Length == 2)
             {
-                label = childInputArray[1];
+                inputDictionary["label"] = childInputArray[1];
             }
 
             string parent;
             string child;
 
-            switch (input)
+            switch (inputDictionary["label"])
             {
                 case "VIEW":
                     CurrentList.printFullChildTasks();
                     Console.WriteLine();
                     break;
                 case "ADD":
+                    if (inputDictionary.ContainsKey("label") && inputDictionary.ContainsKey("content"))
+                    {
+
+                    }
                     Console.WriteLine("Label of parent task: ");
+                    CurrentList.PrintLabels();
                     parent = Console.ReadLine().Trim();
                     Console.WriteLine("Label of child: ");
-                    var child = Console.ReadLine().Trim();
+                    CurrentList.PrintLabels();
+                    child = Console.ReadLine().Trim();
                     CurrentList.setChildTask(CurrentList.Tasks[parent], CurrentList.Tasks[child]);
                     CurrentList.Save();
+                    BeepAndClear();
                     break;
                 case "DELETE":
                     Console.WriteLine("Label of parent task: ");
-                    parent = Console.ReadLine().Trim();
                     CurrentList.printTasksWithChildren();
+                    parent = Console.ReadLine().Trim();
                     Console.WriteLine("Label of child to be deleted: ");
                     CurrentList.printTasksWithChildren();
-                    CurrentList.RemoveChild(parent, child)
+                    child = Console.ReadLine().Trim();
+                    CurrentList.RemoveChild(parent, child);
+                    BeepAndClear();
                     break;
                 case "EDIT":
-                    throw new NotImplementedException();
+                    Console.WriteLine("Label of parent task: ");
+                    CurrentList.printTasksWithChildren();
+                    parent = Console.ReadLine().Trim();
+                    Console.WriteLine("Label of child task to be edited: ");
+                    CurrentList.printTasksWithChildren();
+                    child = Console.ReadLine().Trim();
+                    Console.WriteLine("New content: ");
+                    var childContent = Console.ReadLine().Trim();
+                    CurrentList.editChildTask(parent, child, childContent);
+                    CurrentList.Save();
+                    BeepAndClear();
                     break;
                 case "PARENT":
-                    throw new NotImplementedException();
+                    Console.WriteLine("Label of child task: ");
+                    CurrentList.printTasksWithChildren();
+                    child = Console.ReadLine().Trim();
+                    CurrentList.printParentTask(child);
                     break;
                 default:
                     Console.WriteLine("Input not accepted, please try again.");

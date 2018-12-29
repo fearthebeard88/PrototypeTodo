@@ -329,7 +329,28 @@ namespace TodoPrototype
 
         internal void RemoveChild(string parent, string child)
         {
-            
+            if (Tasks.ContainsKey(parent) && Tasks.ContainsKey(child))
+            {
+                Tasks[parent].Child.Remove(Tasks[child].Label);
+            }
+        }
+
+        internal void printParentTask(string child)
+        {
+            if (Tasks.ContainsKey(child))
+            {
+                var parent = Tasks[child].Parent;
+                Console.WriteLine($"{parent.Label}: {parent.Content}");
+            }
+        }
+
+        internal void editChildTask(string parent, string child, string content)
+        {
+            if (Tasks.ContainsKey(parent) && Tasks.ContainsKey(child))
+            {
+                var childTask = Tasks[parent].getChild(child);
+                childTask.Content = content;
+            }
         }
     }
 }
