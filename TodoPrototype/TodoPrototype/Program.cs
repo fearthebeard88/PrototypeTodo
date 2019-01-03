@@ -18,16 +18,10 @@ namespace TodoPrototype
         {
             TaskCollection CurrentList = TaskCollection.Instance();
             bool exitFlag = false;
+            if (!Log.Load())
             {
-                try
-                {
-                    Log.Load();
-                }
-                catch (CustomExceptions e)
-                {
-                    Console.WriteLine($"The following error/s occured when attempting to set up log file.\n{e.Message}");
-                    return;
-                }
+                Console.WriteLine("Unable to write to log file.");
+                return;
             }
 
             while (!exitFlag)
@@ -86,7 +80,10 @@ namespace TodoPrototype
                             if (response.ContainsKey(500))
                             {
                                 Console.WriteLine(response[500]);
-                                Log.log(response[500]);
+                                if (!Log.log(response[500]))
+                                {
+                                    Console.WriteLine("Writing to log file was not successful.");
+                                }
                             }
                         }
                         else
@@ -95,7 +92,10 @@ namespace TodoPrototype
                             if (response.ContainsKey(500))
                             {
                                 Console.WriteLine(response[500]);
-                                Log.log(response[500]);
+                                if (!Log.log(response[500]))
+                                {
+                                    Console.WriteLine("Writing to log file was not successful.");
+                                }
                             }
                         }
 
@@ -117,13 +117,19 @@ namespace TodoPrototype
                         response = CurrentList.Delete(label);
                         if (response.ContainsKey(500))
                         {
-                            Log.log(response[500]);
+                            if (!Log.log(response[500]))
+                            {
+                                Console.WriteLine("Writing to log file was not successful.");
+                            }
                         }
 
                         response = CurrentList.Save();
                         if (response.ContainsKey(500))
                         {
-                            Log.log(response[500]);
+                            if (!Log.log(response[500]))
+                            {
+                                Console.WriteLine("Writing to log file was not successful.");
+                            }
                         }
 
                         BeepAndClear();
@@ -161,21 +167,30 @@ namespace TodoPrototype
                             if (response.ContainsKey(500))
                             {
                                 Console.WriteLine(response[500]);
-                                Log.log(response[500]);
+                                if (!Log.log(response[500]))
+                                {
+                                    Console.WriteLine("Writing to log file was not successful.");
+                                }
                             }
 
                             response = CurrentList.Save();
                             if (response.ContainsKey(500))
                             {
                                 Console.WriteLine(response[500]);
-                                Log.log(response[500]);
+                                if (!Log.log(response[500]))
+                                {
+                                    Console.WriteLine("Writing to log file was not successful.");
+                                }
                             }
 
                         }
                         else
                         {
                             Console.WriteLine("Invalid label provided.");
-                            Log.log("Invalid label provided.");
+                            if (!Log.log("Invalid label provided."))
+                            {
+                                Console.WriteLine("Writing to log file was not successful.");
+                            }
                         }
                         
                         break;
@@ -208,14 +223,20 @@ namespace TodoPrototype
                         if (response.ContainsKey(500))
                         {
                             Console.WriteLine(response[500]);
-                            Log.log(response[500]);
+                            if (!Log.log(response[500]))
+                            {
+                                Console.WriteLine("Writing to log file was not successful.");
+                            }
                         }
 
                         response = CurrentList.Save();
                         if (response.ContainsKey(500))
                         {
                             Console.WriteLine(response[500]);
-                            Log.log(response[500]);
+                            if (!Log.log(response[500]))
+                            {
+                                Console.WriteLine("Writing to log file was not successful.");
+                            }
                         }
 
                         break;

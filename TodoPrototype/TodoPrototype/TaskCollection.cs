@@ -317,5 +317,9 @@ namespace TodoPrototype
                 childTask.Content = content;
             }
         }
+
+        // add response dictionary to children task methods
+        // log non 200 responses
+        // investigate errors when adding a child task to a parent task
     }
 }

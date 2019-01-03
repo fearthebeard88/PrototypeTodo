@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Configuration;
+using System.Security;
+using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,29 +21,22 @@ namespace TodoPrototype
             return log;
         }
 
-        public static void Load()
+        public static bool Load()
         {
             try
             {
-                if (!File.Exists(getLogFile()))
-                {
-                    var file = File.OpenWrite(getLogFile());
-                    file.Close();
-                }
-                else
-                {
-                    var file = File.OpenWrite(getLogFile());
-                    file.Close();
-                }
+                var file = File.OpenWrite(getLogFile());
+                file.Close();
+                return true;
             }
             catch (Exception e)
             {
-                throw new CustomExceptions($"Error {e.Message} at {e.StackTrace}");
+                return false;
             }
             
         }
 
-        public static Dictionary<int, bool> log(string msg)
+        public static bool log(string msg)
         {
             var response = new Dictionary<int, bool>();
             if (File.Exists(Log.getLogFile()))
@@ -50,19 +45,16 @@ namespace TodoPrototype
                 {
                     string log = $"{DateTime.Now.ToString()}" + Environment.NewLine + $"{msg}" + Environment.NewLine;
                     File.AppendAllText(Log.getLogFile(), log);
-                    response[200] = true;
-                    return response;
+                    return true;
                 }
                 catch (Exception e)
                 {
-                    response[500] = false;
-                    return response;
+                    return false;
                 }
             }
             else
             {
-                response[500] = false;
-                return response;
+                return false;
             }
         }
 
