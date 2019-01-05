@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net.Configuration;
-using System.Security;
-using System.Security.Permissions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TodoPrototype
 {
@@ -29,24 +22,26 @@ namespace TodoPrototype
                 file.Close();
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }
-            
+
         }
 
         public static bool log(string msg)
         {
-            if (File.Exists(Log.getLogFile()))
+            if (File.Exists(Log.getLogFile()) && !String.IsNullOrWhiteSpace(msg))
             {
+                string log = $"{DateTime.Now.ToString()}" + Environment.NewLine + $"{msg}" + Environment.NewLine;
+                string file = getLogFile();
+
                 try
                 {
-                    string log = $"{DateTime.Now.ToString()}" + Environment.NewLine + $"{msg}" + Environment.NewLine;
-                    File.AppendAllText(Log.getLogFile(), log);
+                    File.AppendAllText(file, log);
                     return true;
                 }
-                catch (Exception e)
+                catch (UnauthorizedAccessException)
                 {
                     return false;
                 }
