@@ -38,7 +38,6 @@ namespace TodoPrototype
 
         public static bool log(string msg)
         {
-            var response = new Dictionary<int, bool>();
             if (File.Exists(Log.getLogFile()))
             {
                 try
@@ -68,7 +67,11 @@ namespace TodoPrototype
                 }
                 catch (Exception e)
                 {
-                    Log.log(e.Message);
+                    Console.WriteLine("Unable to delete the log file, please check the log file for more details.");
+                    if (!Log.log(e.Message))
+                    {
+                        throw;
+                    }
                 }
             }
         }

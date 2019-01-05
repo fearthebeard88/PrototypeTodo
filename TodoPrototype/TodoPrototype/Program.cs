@@ -225,7 +225,7 @@ namespace TodoPrototype
                             Console.WriteLine(response[500]);
                             if (!Log.log(response[500]))
                             {
-                                Console.WriteLine("Writing to log file was not successful.");
+                                Console.WriteLine(response[500]);
                             }
                         }
 
@@ -235,7 +235,7 @@ namespace TodoPrototype
                             Console.WriteLine(response[500]);
                             if (!Log.log(response[500]))
                             {
-                                Console.WriteLine("Writing to log file was not successful.");
+                                Console.WriteLine(response[500]);
                             }
                         }
 

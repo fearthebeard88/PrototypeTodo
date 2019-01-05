@@ -59,65 +59,71 @@ namespace TodoPrototype
 
         internal Dictionary<int, string> Create(string label, string content)
         {
+            Dictionary<int, string> response;
             if (this.Tasks.ContainsKey(label))
             {
-                var response = Response(500, $"{label} already contains a task.");
+                response = Response(500, $"{label} already contains a task.");
                 return response;
             }
+            else
+            {
+                if (!String.IsNullOrWhiteSpace(label) && !String.IsNullOrWhiteSpace(content))
+                {
+                    this.Tasks.Add(label, new TodoPrototype.Task(label, content));
+                    response = Response(200, $"{label} created successfully.");
+                    return response;
+                }
 
-            try
-            {
-                this.Tasks.Add(label, new TodoPrototype.Task(label, content));
-                var response = Response(200, $"{label} created successfully.");
-                return response;
-            }
-            catch (Exception e)
-            {
-                var response = Response(500, $"Error: {e.Message} at {e.StackTrace}");
+                response = Response(500, "Unable to create new task.");
                 return response;
             }
         }
 
         internal Dictionary<string, Task>.KeyCollection GetLabels()
         {
-            var labels = Tasks.Keys;
-            return labels;
+            return Tasks.Keys;
         }
 
         internal Dictionary<int, string> Edit(string label, string newContent)
         {
-            if (this.Tasks.ContainsKey(label))
+            if (!String.IsNullOrWhiteSpace(label) && !String.IsNullOrWhiteSpace(newContent))
             {
-                this.Tasks[label].TaskContent = newContent;
-                var response = Response(200, $"{label} changed successfully.");
-                return response;
+                if (this.Tasks.ContainsKey(label))
+                {
+                    this.Tasks[label].TaskContent = newContent;
+                    var response = Response(200, $"{label} changed successfully.");
+                    return response;
+                }
+                else
+                {
+                    var response = Response(500, $"{label} does not exist to edit.");
+                    return response;
+                }
             }
             else
             {
-                var response = Response(500, $"{label} does not exist to edit.");
-                return response;
+                return Response(500, "No label or content provided.");
             }
+            
         }
 
         internal Dictionary<int, string> Delete(string label)
         {
-            if (!this.Tasks.ContainsKey(label))
+            if (!String.IsNullOrWhiteSpace(label))
             {
-                var response = Response(500, $"{label} does not exist, unable to delete.");
+                Dictionary<int, string> response;
+                if (!this.Tasks.ContainsKey(label))
+                {
+                    response = Response(500, $"{label} does not exist, unable to delete.");
+                    return response;
+                }
+
+                this.Tasks.Remove(label);
+                response = Response(200, $"{label} deleted successfully.");
                 return response;
             }
 
-            try
-            {
-                this.Tasks.Remove(label);
-                var response = Response(200, $"{label} deleted successfully.");
-                return response;
-            }
-            catch (Exception e)
-            {
-                var response = Response(500, $"Error: {e.Message} at {e.StackTrace}");
-                return response;
-            }
+            return Response(500, "No label provided.");
         }
 
         internal Dictionary<int, string> Save()
@@ -142,7 +148,7 @@ namespace TodoPrototype
         internal Dictionary<int, string> Load()
         {
             string Path = TaskCollection.ResourcePath.Replace('/', System.IO.Path.DirectorySeparatorChar);
-            var response = new Dictionary<int, string>();
+            Dictionary<int, string> response;
 
             if (File.Exists(Path))
             {
